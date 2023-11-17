@@ -1,43 +1,44 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contagem Regressiva para o Natal</title>
     <style>
-        *{
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
         body {
             font-family: 'Arial', sans-serif;
             text-align: center;
             padding: 50px;
-            background-image: url(https://static.vecteezy.com/ti/vetor-gratis/p1/14461895-fundo-de-papel-de-parede-feliz-natal-com-flocos-de-neve-e-arvore-de-natal-gratis-vetor.jpg);
+            background-image: url(natal.png);
+            background-position: bottom;
             background-repeat: no-repeat;
-            color: #333;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            background-size: 500px;
+            height: 80vh;
         }
         #countdown {
             font-size: 2em;
             font-weight: bold;
+            color: #333;
         }
-        .container{
-            background-color: rgb(104, 214, 214);
-            display: flex;
-            flex-direction: column;
-            padding: 70px;
+        #progress-bar {
+            margin-top: 20px;
+            width: 100%;
+            height: 20px;
+            background-color: #eee;
+            position: relative;
+        }
+        #progress {
+            height: 100%;
+            background-color: #4CAF50;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>Contagem Regressiva para o Natal</h1>
-        <div id="countdown"></div>
+    <h1>Contagem Regressiva para o Natal</h1>
+    <div id="countdown"></div>
+    <div id="progress-bar">
+        <div id="progress"></div>
     </div>
 
     <script>
@@ -61,14 +62,23 @@
         // Função para exibir a contagem regressiva
         function initializeClock(endtime) {
             const countdown = document.getElementById('countdown');
+            const progressBar = document.getElementById('progress');
+            const progressBarContainer = document.getElementById('progress-bar');
 
             function updateClock() {
                 const t = getTimeRemaining(endtime);
 
                 countdown.innerHTML = `${t.days}d ${t.hours}h ${t.minutes}m ${t.seconds}s`;
 
+                const totalTime = Date.parse(endtime) - Date.parse(dataDeInicioDoProgresso);
+                const elapsedTime = totalTime - t.total;
+                const percentage = (elapsedTime / totalTime) * 100;
+
+                progressBar.style.width = `${percentage}%`;
+
                 if (t.total <= 0) {
                     clearInterval(timeinterval);
+                    progressBar.style.width = '100%';
                 }
             }
 
@@ -77,6 +87,7 @@
             const timeinterval = setInterval(updateClock, 1000);
         }
 
+        const dataDeInicioDoProgresso = new Date("Oct 1, " + new Date().getFullYear() + " 00:00:00 GMT");
         // Define a data de término para o Natal deste ano
         const deadline = new Date("December 25, " + new Date().getFullYear() + " 00:00:00 GMT");
 
